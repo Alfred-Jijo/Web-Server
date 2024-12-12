@@ -2,6 +2,10 @@
 #include <Windows.h>
 #include <winsock2.h>
 
+#ifndef UNICODE
+#define UNICODE
+#endif //UNICODE
+
 #include <stdio.h>
 #include <string.h>
 #define EXIT_FAILURE 1
@@ -17,7 +21,7 @@ int main(void) {
 		WSACleanup();
 		return EXIT_FAILURE;
 	}
-	
+
 	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == INVALID_SOCKET) {
 		printf("socket function failed with error code: %d\n", WSAGetLastError());
@@ -25,7 +29,7 @@ int main(void) {
 
 	struct sockaddr_in addr;
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = 0;
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	addr.sin_port = htons(8080);
 
 	err = bind(sock, &addr, sizeof(addr));
@@ -62,9 +66,7 @@ int main(void) {
 	} 
 
 	char c;
-	scanf("%c", &c);
-	closesocket(sock);
-	WSACleanup();
+	fscanf(stdin, "%c", &c);
 	return EXIT_SUCCESS;
 }
 
